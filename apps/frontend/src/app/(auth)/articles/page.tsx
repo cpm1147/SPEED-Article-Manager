@@ -18,7 +18,7 @@ interface Article {
   isModerated: boolean;
   isRejected: boolean;
   createdAt: string;
-  isApproved: string;
+  isApproved: boolean;
 }
 
 export default function ArticlesPage() {
@@ -38,7 +38,7 @@ export default function ArticlesPage() {
     const fetchArticles = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articles/reviewed`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articles/approved`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch articles");

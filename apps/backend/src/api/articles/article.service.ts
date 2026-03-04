@@ -94,7 +94,7 @@ export class ArticleService {
   }
 
   async findApproved(): Promise<Article[]> {
-    return await this.articleModel.find({ approved: true }).exec();
+    return await this.articleModel.find({ isApproved: true }).exec();
   }
 
   async findReviewed(): Promise<Article[]> {
