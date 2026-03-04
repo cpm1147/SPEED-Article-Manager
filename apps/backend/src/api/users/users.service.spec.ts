@@ -16,6 +16,7 @@ describe('UsersService', () => {
           useValue: {
             findOne: jest.fn(), // Add more mocks as needed
             create: jest.fn(),
+            loginAdmin: jest.fn(),
           },
         },
         {
@@ -32,5 +33,17 @@ describe('UsersService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('Successfully logs in as ADMIN', async () => {
+    const result = await service.loginAdmin();
+    expect(result).toEqual({
+      _id: 0,
+      access_token: 'mocked_token',
+      first_name: 'ADMIN',
+      last_name: 'ADMIN',
+      email: 'ADMIN',
+      role: 'ADMIN',
+    });
   });
 });

@@ -27,8 +27,11 @@ export default function ModerationDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!localStorage.getItem('access_token')) {
-      router.push('/');
+    const token = localStorage.getItem("access_token");
+    const role = localStorage.getItem("role");
+
+    if (!token || (role !== "MODERATOR" && role !== "ADMIN")) {
+      router.push("/");
       return;
     }
   }, [router]);

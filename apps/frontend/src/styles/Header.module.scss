@@ -24,6 +24,9 @@
 .navList li {
   padding: 0.5rem;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .current {

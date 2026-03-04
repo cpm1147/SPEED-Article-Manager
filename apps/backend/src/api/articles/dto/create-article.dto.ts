@@ -7,5 +7,10 @@ export class CreateArticleDto {
   doi: string;
   abstract?: string;
   linked_discussion?: string;
+  practice?: string;
+  claim?: string;
+  result?: string;
+  participant_type?: string;
+  method?: string;
   isModerated?: boolean;
 }

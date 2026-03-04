@@ -18,6 +18,7 @@ interface Article {
   isModerated: boolean;
   isRejected: boolean;
   createdAt: string;
+  isApproved: boolean;
 }
 
 export default function ArticlesPage() {
@@ -37,7 +38,7 @@ export default function ArticlesPage() {
     const fetchArticles = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articles/reviewed`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articles/approved`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch articles");
@@ -85,20 +86,24 @@ export default function ArticlesPage() {
                     {article.source}
                   </div>
                   <div>
-                    {article.isRejected ? (
-                      <span className="text-red-500 font-bold">
-                        ARTICLE IS REJECTED
-                      </span>
-                    ) : article.isModerated ? (
-                      <span className="text-green-600 font-bold">
-                        ARTICLE IS MODERATED
-                      </span>
-                    ) : (
-                      <span className="text-orange-500 font-bold">
-                        ARTICLE IS NOT MODERATED
-                      </span>
-                    )}
-                  </div>
+                  {article.isRejected ? (
+                    <span className="text-red-500 font-bold">
+                      ARTICLE IS REJECTED
+                    </span>
+                  ) : article.isModerated && !article.isApproved ? (
+                    <span className="text-blue-600 font-bold">
+                      AWAITING ANALYSIS
+                    </span>
+                  ) : article.isModerated ? (
+                    <span className="text-green-600 font-bold">
+                      ARTICLE IS APPROVED
+                    </span>
+                  ) : (
+                    <span className="text-orange-500 font-bold">
+                      ARTICLE IS NOT MODERATED
+                    </span>
+                  )}
+                </div>
                 </div>
               </Link>
             </div>

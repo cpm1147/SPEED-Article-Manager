@@ -9,7 +9,7 @@ export class Article {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true, type: [String] }) 
+  @Prop({ required: true, type: [String] })
   authors: string[];
 
   @Prop()
@@ -27,11 +27,29 @@ export class Article {
   @Prop()
   linked_discussion: string;
 
+  @Prop()
+  practice: string;
+
+  @Prop()
+  claim: string;
+
+  @Prop()
+  result: string;
+
+  @Prop()
+  participant_type: string;
+
+  @Prop()
+  method: string;
+
   @Prop({ default: false })
   isModerated: boolean;
 
   @Prop({ default: false })
   isRejected: boolean;
+
+  @Prop({ default: false })
+  isApproved: boolean;
 
   @Prop({ default: Date.now })
   createdAt: Date;

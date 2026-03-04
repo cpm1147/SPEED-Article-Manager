@@ -44,11 +44,18 @@ const Header: React.FC = () => {
             <a onClick={() => router.push("/admin")}>Admin</a>
           </li>
         ) : null}
-        {role === "MODERATOR" ? (
+        {role === "MODERATOR" || role === "ADMIN" ? (
           <li
             className={currentPage === "moderation" ? headerStyles.current : ""}
           >
             <a onClick={() => router.push("/moderation")}>Moderate</a>
+          </li>
+        ) : null}
+        {role === "ANALYST" || role === "ADMIN" ? (
+          <li
+            className={currentPage === "analyst" ? headerStyles.current : ""}
+          >
+            <a onClick={() => router.push("/analyst")}>Analyst</a>
           </li>
         ) : null}
       </ul>

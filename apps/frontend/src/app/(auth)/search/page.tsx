@@ -30,6 +30,8 @@ const SearchArticles = () => {
   const [pubYearStart, setPubYearStart] = useState<number | "">("");
   const [pubYearEnd, setPubYearEnd] = useState<number | "">("");
   const [doi, setDoi] = useState("");
+  const [practice, setPractice] = useState("");
+  const [searchClaim, setSearchClaim] = useState("");
   const [results, setResults] = useState<Article[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,7 @@ const SearchArticles = () => {
   const [yearFilter, setYearFilter] = useState<number | null>(null);
   const [showClaimFilter, setShowClaimFilter] = useState(false);
   const [showYearFilter, setShowYearFilter] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const [sortConfig, setSortConfig] = useState({
     key: "title" as keyof Article,
@@ -79,6 +82,9 @@ const SearchArticles = () => {
         `publication_year_end=${encodeURIComponent(pubYearEnd)}`
       );
     if (doi) queryParams.push(`doi=${encodeURIComponent(doi)}`);
+    if (practice) queryParams.push(`practice=${encodeURIComponent(practice)}`);
+    if (searchClaim)
+      queryParams.push(`claim=${encodeURIComponent(searchClaim)}`);
 
     return queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
   };
@@ -112,7 +118,9 @@ const SearchArticles = () => {
     } catch (error) {
       alert(error);
       console.error("Search error:", error);
+    } finally {
       setLoading(false);
+      setHasSearched(true);
     }
   };
 
@@ -337,6 +345,23 @@ const SearchArticles = () => {
             onChange={(e) => setDoi(e.target.value)}
           />
 
+          <label htmlFor="practice">Practice:</label>
+          <input
+            className={formStyles.formItem}
+            type="text"
+            id="practice"
+            value={practice}
+            onChange={(e) => setPractice(e.target.value)}
+          />
+          <label htmlFor="searchClaim">Claim:</label>
+          <input
+            className={formStyles.formItem}
+            type="text"
+            id="searchClaim"
+            value={searchClaim}
+            onChange={(e) => setSearchClaim(e.target.value)}
+          />
+
           {errors.title && <p className={formStyles.error}>{errors.title}</p>}
 
           <button
@@ -347,6 +372,12 @@ const SearchArticles = () => {
             {loading ? "Searching..." : "Search"}
           </button>
         </form>
+
+        {!loading && hasSearched && results.length === 0 && (
+          <p style={{ marginTop: "1rem", fontStyle: "italic" }}>
+            No results found. Try adjusting your search criteria.
+          </p>
+        )}
 
         {results.length > 0 && (
           <div>

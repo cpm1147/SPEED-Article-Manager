@@ -38,6 +38,18 @@
   color: #000000;
 }
 
+.formButton {
+  padding: 0.5rem;
+  border: 1px solid #4444ff;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #4444ff;
+  }
+}
+
 .formTextArea {
   min-height: 80px;
   padding: 0.5rem;

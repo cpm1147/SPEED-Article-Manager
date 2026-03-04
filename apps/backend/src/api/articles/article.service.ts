@@ -20,10 +20,28 @@ export class ArticleService {
 
   async find(query: any): Promise<Article[]> {
     if (query.all === 'true' || Object.keys(query).length === 0) {
-      return await this.findAll();
+      return await this.findApproved();
+    }
+    //moderation/analysis handling
+
+    if (query.isModerated == 'false') {
+      return await this.findUnmoderated();
     }
 
-    const filter: any = {};
+    if (query.isRejected == 'true') {
+      return await this.findRejected();
+    }
+
+    if (query.isApproved == 'false') {
+      return await this.findAwaitingAnalysis();
+    }
+
+    //general handling
+    const filter: any = {
+      isModerated: true,
+      isRejected: false,
+      isApproved: true,
+    };
 
     if (query.title) {
       filter.title = { $regex: query.title, $options: 'i' };
@@ -52,6 +70,14 @@ export class ArticleService {
       filter.doi = query.doi;
     }
 
+    if (query.practice) {
+      filter.practice = { $regex: query.practice, $options: 'i' };
+    }
+
+    if (query.claim) {
+      filter.claim = { $regex: query.claim, $options: 'i' };
+    }
+
     if (typeof query.isModerated !== 'undefined') {
       filter.isModerated = query.isModerated === 'true';
     }
@@ -67,16 +93,29 @@ export class ArticleService {
     return await this.articleModel.find().exec();
   }
 
+  async findApproved(): Promise<Article[]> {
+    return await this.articleModel.find({ isApproved: true }).exec();
+  }
+
   async findReviewed(): Promise<Article[]> {
-    return await this.articleModel.find({ isModerated: true, isRejected: false }).exec();
+    return await this.articleModel
+      .find({ isModerated: true, isRejected: false })
+      .exec();
   }
 
   async findUnmoderated(): Promise<Article[]> {
-    return await this.articleModel.find({ isModerated: false, isRejected: false }).exec();
+    return await this.articleModel
+      .find({ isModerated: false, isRejected: false })
+      .exec();
   }
 
   async findRejected(): Promise<Article[]> {
     return await this.articleModel.find({ isRejected: true }).exec();
+  }
+
+  //analysis comes after moderation but before approval
+  async findAwaitingAnalysis(): Promise<Article[]> {
+    return await this.articleModel.find({ isModerated: true, isRejected: false, isApproved: false}).exec();
   }
 
   async findById(id: string): Promise<Article | null> {
@@ -97,5 +136,20 @@ export class ArticleService {
       { isModerated: false, isRejected: true },
       { new: true },
     );
+  }
+
+  async analyse(id: string, updated_fields: Partial<Article>): Promise<Article | null> {
+    const updated = await this.articleModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          ...updated_fields,
+        },
+        isApproved: true,
+      },
+      { new: true },
+    );
+  
+    return updated;
   }
 }
