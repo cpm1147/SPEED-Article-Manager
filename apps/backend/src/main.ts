@@ -1,32 +1,28 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
 const server = express();
-const isVercel = !!process.env.VERCEL;
+const isVercel = process.env.VERCEL === '1';
 
-async function bootstrap(): Promise<NestExpressApplication | void> {
+async function bootstrap() {
   if (isVercel) {
-    const app = await NestFactory.create<NestExpressApplication>(
-      AppModule,
-      new ExpressAdapter(server),
-    );
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
     app.enableCors({ origin: true, credentials: true });
-    await app.init(); 
-    return app;
+    await app.init();
   } else {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const app = await NestFactory.create(AppModule);
     app.enableCors({ origin: true, credentials: true });
-    const port = Number(process.env.PORT) || 3001;
+
+    const port = process.env.PORT || 3001;
     await app.listen(port);
+
     console.log(`Backend running at http://localhost:${port}`);
   }
 }
 
-bootstrap().catch(err => {
-  console.error('NestJS bootstrap error', err);
-});
+bootstrap();
 
-export default server; 
+export default server;
