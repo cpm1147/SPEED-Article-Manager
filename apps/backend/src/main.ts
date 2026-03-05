@@ -2,27 +2,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
+import express, { Request, Response } from 'express';
 
 const server = express();
-const isVercel = process.env.VERCEL === '1';
 
 async function bootstrap() {
-  if (isVercel) {
-    const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-    app.enableCors({ origin: true, credentials: true });
-    await app.init();
-  } else {
-    const app = await NestFactory.create(AppModule);
-    app.enableCors({ origin: true, credentials: true });
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-    const port = process.env.PORT || 3001;
-    await app.listen(port);
+  app.enableCors({ origin: true, credentials: true });
 
-    console.log(`Backend running at http://localhost:${port}`);
-  }
+  await app.init();
 }
 
 bootstrap();
+
+server.all('*', (req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.status(404).json({ error: 'Route not found. Make sure your controllers handle this path.' });
+});
 
 export default server;
