@@ -2,23 +2,27 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express, { Request, Response } from 'express';
+import express from 'express';
 
 const server = express();
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-
+async function createNestServer(expressInstance = server) {
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressInstance));
   app.enableCors({ origin: true, credentials: true });
-
   await app.init();
+  return app;
 }
 
-bootstrap();
-
-server.all('*', (req: Request, res: Response) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.status(404).json({ error: 'Route not found. Make sure your controllers handle this path.' });
-});
+if (process.env.VERCEL === '1') {
+  createNestServer();
+} else {
+  (async () => {
+    const app = await NestFactory.create(AppModule);
+    app.enableCors({ origin: true, credentials: true });
+    const port = process.env.PORT || 3001;
+    await app.listen(port);
+    console.log(`Local backend running at http://localhost:${port}`);
+  })();
+}
 
 export default server;
