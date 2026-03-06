@@ -6,20 +6,22 @@ import express from 'express';
 
 const server = express();
 
-async function bootstrap() {
-  const app = await NestFactory.create(
-    AppModule,
-    new ExpressAdapter(server),
-  );
-
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
-
+async function createNestServer(expressInstance = server) {
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressInstance));
+  app.enableCors({ origin: true, credentials: true });
   await app.init();
 }
 
-bootstrap();
+if (process.env.VERCEL) {
+  createNestServer(server);
+} else {
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    app.enableCors({ origin: true, credentials: true });
+    await app.listen(process.env.PORT || 3001);
+    console.log('Local backend running');
+  }
+  bootstrap();
+}
 
 export default server;
