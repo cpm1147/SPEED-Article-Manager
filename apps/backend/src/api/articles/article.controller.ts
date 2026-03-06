@@ -29,32 +29,32 @@ export class ArticleController {
     return await this.articleService.find(query);
   }
 
-  @Get('/approved')
+  @Get('approved')
   async findApproved(): Promise<Article[]> {
     return await this.articleService.findApproved();
   }
 
-  @Get('/reviewed')
+  @Get('reviewed')
   async findReviewed(): Promise<Article[]> {
     return await this.articleService.findReviewed();
   }
 
-  @Get('/unmoderated')
+  @Get('unmoderated')
   async findUnmoderated(): Promise<Article[]> {
     return await this.articleService.findUnmoderated();
   }
 
-  @Get('/rejected')
+  @Get('rejected')
   async findRejected(): Promise<Article[]> {
     return await this.articleService.findRejected();
   }
 
-  @Get('/awaiting-analysis')
+  @Get('awaiting-analysis')
   async findAwaitingAnalysis(): Promise<Article[]> {
     return await this.articleService.findAwaitingAnalysis();
   }
 
-  @Get('/:id')
+  @Get(':id')
   async findById(@Param('id') id: string): Promise<Article> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid article ID');
@@ -66,7 +66,7 @@ export class ArticleController {
     return article;
   }
 
-  @Put('/:id/moderate')
+  @Put(':id/moderate')
   async moderate(@Param('id') id: string): Promise<Article> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid article ID');
@@ -78,7 +78,7 @@ export class ArticleController {
     return updated;
   }
 
-  @Put('/:id/reject')
+  @Put(':id/reject')
   async reject(@Param('id') id: string): Promise<Article> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid article ID');
@@ -90,7 +90,7 @@ export class ArticleController {
     return updated;
   }
 
-  @Put('/:id/analyse')
+  @Put(':id/analyse')
   async analyse(
     @Param('id') id: string,
     @Body() updated_fields: Partial<Article>,
