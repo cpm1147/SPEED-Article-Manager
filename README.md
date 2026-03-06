@@ -1,4 +1,31 @@
 <h1>The Software Practice Empirical Evidence Database Application</h1>
 
-<h2>This is using concurrently</h2>
-<h3><strong>TO RUN, EXECUTE "npm run dev" AT THE ROOT DIRECTORY ("/SPEED/")</strong></h3>
+https://speed-article-manager-willies-projects-baa3ebec.vercel.app/
+
+<b>Features:</b>
+
+
+<b>User registration and login:</b>
+
+- Create a personal account to access and submit articles.
+
+- Articles will only display once approved by the admin role.
+
+
+<b>Admin login:</b>
+
+- Access full moderation controls using admin credentials.
+
+- Admins can assign roles to users.
+
+- View, create, moderate, and reject articles.
+
+
+
+<b>Admin Credentials</b>
+
+To log in as an admin, use the following credentials:
+
+Username: admin
+
+Password: admin
