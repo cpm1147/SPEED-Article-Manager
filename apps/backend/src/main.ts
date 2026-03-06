@@ -25,7 +25,7 @@ if (process.env.VERCEL === '1') {
   })();
 }
 
-server.all('*', async (req: Request, res: Response) => {
+server.all('/(.*)', async (req: Request, res: Response) => {
   try {
     await createNestServer(server);
   } catch (err: unknown) {
