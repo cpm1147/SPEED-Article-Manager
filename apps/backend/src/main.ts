@@ -2,7 +2,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
+import express, { Request, Response } from 'express';
 
 const server = express();
 
@@ -24,5 +24,18 @@ if (process.env.VERCEL === '1') {
     console.log(`Local backend running at http://localhost:${port}`);
   })();
 }
+
+server.all('*', async (req: Request, res: Response) => {
+  try {
+    await createNestServer(server);
+  } catch (err: unknown) {
+  const message = err instanceof Error ? err.message : 'Unknown error';
+
+  res.status(500).json({
+    message: 'Internal server error',
+    error: message,
+  });
+}
+});
 
 export default server;
