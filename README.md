@@ -9,7 +9,7 @@ https://speed-article-manager-willies-projects-baa3ebec.vercel.app/
 
 - Create a personal account to access and submit articles.
 
-- Articles will only display once approved by the admin role.
+- Articles will only display once approved by the admin role and analysed by the analyst role.
 
 
 <b>Admin login:</b>
