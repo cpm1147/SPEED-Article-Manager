@@ -9,6 +9,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export default function Home() {
   const router = useRouter();
 
+  const [showWarning, setShowWarning] = useState(true);
+
   const [registerFormData, setRegisterFormData] = useState({
     first_name: "",
     last_name: "",
@@ -118,6 +120,15 @@ export default function Home() {
 
   return (
     <div className={landingStyles.container}>
+      {showWarning && (
+        <div className={landingStyles.warningBanner}>
+          <span>
+            ⚠️ Heads up: The backend runs on a free server that spins down after inactivity. 
+            First request may take up to 50 seconds to wake up.
+          </span>
+          <button onClick={() => setShowWarning(false)}>✕</button>
+        </div>
+      )}
       <div className={landingStyles.formWrapper}>
         <h1>Software Practice Empirical Evidence Database</h1>
         <div className="flex my-5 w-2/3 space-x-5">
