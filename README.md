@@ -1,6 +1,6 @@
 <h1>The Software Practice Empirical Evidence Database Application</h1>
 
-https://speed-article-manager-willies-projects-baa3ebec.vercel.app/
+https://speed-article-manager.vercel.app/
 
 <b>Features:</b>
 
